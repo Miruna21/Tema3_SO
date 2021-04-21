@@ -31,10 +31,30 @@ struct seg_extra_info {
 };
 
 
+/* setez un handler pentru tratarea semnalului SIGSEGV */
+static void signal_handler_configuration(void)
+{
+	struct sigaction action;
+	int ret;
+
+	action.sa_flags = SA_SIGINFO;
+	action.sa_sigaction = segfault_handler;
+	sigemptyset(&action.sa_mask);
+	sigaddset(&action.sa_mask, SIGSEGV);
+
+	ret = sigaction(SIGSEGV, &action, &old_action);
+	if (ret == -1) {
+		perror("sigaction error\n");
+		exit(EXIT_FAILURE);
+	}
+}
+
 int so_init_loader(void)
 {
-	/* TODO: initialize on-demand loader */
-	return -1;
+	page_size = getpagesize();
+	signal_handler_configuration();
+
+	return 0;
 }
 
 int so_execute(char *path, char *argv[])
