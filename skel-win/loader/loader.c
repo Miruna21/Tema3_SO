@@ -36,10 +36,24 @@ struct seg_extra_info {
 	int *mapped;
 };
 
+static LPVOID action;
+
+/* setez un handler pentru tratarea semnalului SIGSEGV */
+static void signal_handler_configuration(void)
+{
+	action = AddVectoredExceptionHandler(1, segfault_handler);
+
+	if (action == NULL) {
+		perror("AddVectoredExceptionHandler error\n");
+		exit(EXIT_FAILURE);
+	}
+}
+
 int so_init_loader(void)
 {
-	/* TODO: initialize on-demand loader */
-	return -1;
+	signal_handler_configuration();
+
+	return 0;
 }
 
 int so_execute(char *path, char *argv[])
