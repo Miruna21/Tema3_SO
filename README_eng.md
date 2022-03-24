@@ -5,7 +5,7 @@ Group: 331CA
 
 Organization
 -
-* Idea: Implement a ** static executable file loader ** in the form of a shared library.
+* Idea: Implement a **static executable file loader** in the form of a shared library.
 * The solution is based on the development of a C program on ** Unix and Windows ** systems, which loads an executable file in page-by-page memory, using the ** demand paging ** mechanism.
 
 
